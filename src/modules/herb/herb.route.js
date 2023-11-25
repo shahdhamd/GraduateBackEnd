@@ -10,5 +10,5 @@ router.post('/',auth(endpoint.createHerb),myMulter(fileValidation.imag).single('
 router.delete('/:id',auth(endpoint.delete),herb.deleteHerb)
 router.patch('/:id',auth(endpoint.update),myMulter(fileValidation.imag).single('image'),herb.updateHerb)
 router.get('/',auth(endpoint.search),herb.searchByName)
-router.get('/all',auth(endpoint.getAllHerb),herb.getAllHerb)
+router.get('/all',herb.getAllHerb)
 export default router
