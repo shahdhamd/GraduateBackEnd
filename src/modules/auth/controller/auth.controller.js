@@ -9,7 +9,7 @@ export const signup=async(req,res)=>{
       const {passward,userName,email}=req.body
       const user=await userModel.findOne({email:email})
       if(user){
-          res.status(409).json('email exist')
+          res.json('email exist')
       }
       else{
           const hash=bcrypt.hashSync(passward,parseInt(process.env.SaltRound))  ///شفرته 
@@ -282,11 +282,11 @@ export const signup=async(req,res)=>{
               const saveUser=await newUser.save()
               return res.status(200).json({message:'sucess',saveUser})
           }else{
-              return res.status(404).json('fail signup')
+              return res.json('fail signup')
           }
           }
     }catch(error){
-        res.status(400).json({message:`catch error ${error}`})
+        res.json({message:`catch error ${error}`})
     }
     
 }
@@ -296,7 +296,7 @@ export const confirmEmail=async(req,res)=>{
         const decoded=jwt.verify(token,process.env.ConfirmEmailToken)
         // res.json(decoded)
         if(!decoded){
-            res.status(400).json({message:'invalid token'})
+            res.json({message:'invalid token'})
         }else{
             const user=await userModel.findByIdAndUpdate({_id:decoded.id ,confirmEmail:false},{confirmEmail:true})
            return res.status(200).json({message:'sucess confirm',user})
@@ -313,14 +313,14 @@ export const signin=async(req,res)=>{
         const {email,passward}=req.body;  
         const findUser=await userModel.findOne({email:email})
         if(!findUser){
-            return res.status(404).json({message:'go to sign up please'})
+            return res.json({message:'go to sign up please'})
         }else{
             if(!findUser.confirmEmail){
-               return res.status(400).json({message:'confirm email please'})
+               return res.json({message:'confirm email please'})
             }
             const match=bcrypt.compare(passward,findUser.passward)
             if(!match){
-               return res.status(400).json({message:'invaild passward'})
+               return res.json({message:'invaild passward'})
             }
             const now=moment()
             const user=await userModel.findByIdAndUpdate(findUser.id,{lastOpenDate:now})
@@ -328,7 +328,7 @@ export const signin=async(req,res)=>{
             return res.status(200).json({message:"sucess sign in",token})
         }
     }catch(error){
-        res.status(400).json(`catch error ${error}`)
+        res.json(`catch error ${error}`)
     }
     
 }
@@ -336,18 +336,18 @@ export const forgetPassward=async(req,res)=>{
   try{
       const {code,email,newPassward}=req.body;
       if(code==null){
-        return res.status(400).json({message:'enter code please'})
+        return res.json({message:'enter code please'})
       }
       else{
           const hash=bcrypt.hashSync(newPassward,parseInt(process.env.SaltRound))
           const user=await userModel.findOneAndUpdate({email:email,sendCode:code},{passward:hash,sendCode:null})
           if(!user){
-            return res.status(400).json({message:'fail'})
+            return res.json({message:'fail'})
           }
           return res.status(200).json({message:'sucess',user})
       }
   }catch(error){
-      return res.status(400).json({message:`catch error ${error}`})
+      return res.json({message:`catch error ${error}`})
   }
 
 }
@@ -356,7 +356,7 @@ export const sendCode=async(req,res)=>{
         const {email}=req.body;
         const findUser=await userModel.findOne({email:email})
         if(!findUser){
-            return res.status(400).json({message:'go to sign up please'})
+            return res.json({message:'go to sign up please'})
         }
         const code=nanoid()
         const user=await userModel.findOneAndUpdate({_id:findUser.id},{sendCode:code})
@@ -366,7 +366,7 @@ export const sendCode=async(req,res)=>{
         await sendEmail(email,'forget passward',`verify code ${code}`)
         return res.status(200).json({message:'sucess',user})
     }catch(error){
-        return res.status(400).json({message:`catch error ${error}`})
+        return res.json({message:`catch error ${error}`})
     }
     
 
