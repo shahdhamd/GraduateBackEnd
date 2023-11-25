@@ -296,7 +296,7 @@ export const confirmEmail=async(req,res)=>{
         const decoded=jwt.verify(token,process.env.ConfirmEmailToken)
         // res.json(decoded)
         if(!decoded){
-            res.json({message:'invalid token'})
+            res.json('invalid token')
         }else{
             const user=await userModel.findByIdAndUpdate({_id:decoded.id ,confirmEmail:false},{confirmEmail:true})
            return res.status(200).json({message:'sucess confirm',user})
@@ -314,17 +314,17 @@ export const signin=async(req,res)=>{
        const user=await userModel.findOne({email});
   // res.json(user)
   if(!user){
-      res.json({message:'email not exist'})
+      res.json('email not exist')
   }else{
       if(!user.confirmEmail){
-          res.json({message:'email not confirmed'})
+          res.json('email not confirmed')
       }else{
           if(user.blocked){
-              res.json({message:'blocked account'})
+              res.json('blocked account')
           }else{
               const match=await bcrypt.compare(passward,user.passward)
               if(!match){
-                  res.json({message:'invalid password'})
+                  res.json('invalid password')
               }else{
                   const token= jwt.sign({id:user._id},process.env.TokenSignIn,{expiresIn:60 * 60 * 24})
                   res.status(200).json({message:'sucess',token})
@@ -341,13 +341,13 @@ export const forgetPassward=async(req,res)=>{
   try{
       const {code,email,newPassward}=req.body;
       if(code==null){
-        return res.json({message:'enter code please'})
+        return res.json('enter code please')
       }
       else{
           const hash=bcrypt.hashSync(newPassward,parseInt(process.env.SaltRound))
           const user=await userModel.findOneAndUpdate({email:email,sendCode:code},{passward:hash,sendCode:null})
           if(!user){
-            return res.json({message:'fail'})
+            return res.json('fail')
           }
           return res.status(200).json({message:'sucess',user})
       }
@@ -361,7 +361,7 @@ export const sendCode=async(req,res)=>{
         const {email}=req.body;
         const findUser=await userModel.findOne({email:email})
         if(!findUser){
-            return res.json({message:'go to sign up please'})
+            return res.json('go to sign up please')
         }
         const code=nanoid()
         const user=await userModel.findOneAndUpdate({_id:findUser.id},{sendCode:code})
