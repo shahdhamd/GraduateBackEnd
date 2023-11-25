@@ -322,7 +322,7 @@ export const signin=async(req,res)=>{
           if(user.blocked){
               res.json({message:'blocked account'})
           }else{
-              const match=await bcrypt.compare(password,user.password)
+              const match=await bcrypt.compare(passward,user.passward)
               if(!match){
                   res.json({message:'invalid password'})
               }else{
