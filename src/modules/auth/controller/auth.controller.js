@@ -304,7 +304,7 @@ export const confirmEmail=async(req,res)=>{
         }
         
     }catch(error){
-       return res.status(400).json(`error catch ${error}`)
+       return res.json(`error catch ${error}`)
     }
     
 }
@@ -361,7 +361,7 @@ export const sendCode=async(req,res)=>{
         const code=nanoid()
         const user=await userModel.findOneAndUpdate({_id:findUser.id},{sendCode:code})
         if(!user){
-            return res.status(400).json('fail')
+            return res.json('fail')
         }
         await sendEmail(email,'forget passward',`verify code ${code}`)
         return res.status(200).json({message:'sucess',user})
