@@ -311,22 +311,27 @@ export const confirmEmail=async(req,res)=>{
 export const signin=async(req,res)=>{
     try{
         const {email,passward}=req.body;  
-        const findUser=await userModel.findOne({email:email})
-        if(!findUser){
-            return res.json({message:'go to sign up please'})
-        }else{
-            if(!findUser.confirmEmail){
-               return res.json({message:'confirm email please'})
-            }
-            const match=bcrypt.compare(passward,findUser.passward)
-            if(!match){
-               return res.json({message:'invaild passward'})
-            }
-            const now=moment()
-            const user=await userModel.findByIdAndUpdate(findUser.id,{lastOpenDate:now})
-            const token =jwt.sign({id:findUser._id},process.env.TokenSignIn,{expiresIn:60 *60 *24})
-            return res.status(200).json({message:"sucess",token})
-        }
+       const user=await userModel.findOne({email});
+  // res.json(user)
+  if(!user){
+      res.json({message:'email not exist'})
+  }else{
+      if(!user.confirmEmail){
+          res.json({message:'email not confirmed'})
+      }else{
+          if(user.blocked){
+              res.json({message:'blocked account'})
+          }else{
+              const match=await bcrypt.compare(password,user.password)
+              if(!match){
+                  res.json({message:'invalid password'})
+              }else{
+                  const token= jwt.sign({id:user._id},process.env.TokenSignIn,{expiresIn:60 * 60 * 24})
+                  res.status(200).json({message:'sucess',token})
+              }
+          }
+      }
+  }
     }catch(error){
         res.json(`catch error ${error}`)
     }
