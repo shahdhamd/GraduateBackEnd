@@ -14,7 +14,7 @@ export const signup=async(req,res)=>{
       else{
           const hash=bcrypt.hashSync(passward,parseInt(process.env.SaltRound))  ///شفرته 
           const newUser=await userModel({userName,email,passward:hash}) // خزنت الداتا في متغير
-          let token=jwt.sign({id:newUser._id},process.env.ConfirmEmailToken,{expiresIn:'1h'}) // عملت توكن
+          let token=jwt.sign({id:newUser._id,userName,password},process.env.ConfirmEmailToken,{expiresIn:'1h'}) // عملت توكن
                 // let link=`${req.protocol}:/${req.headers.host}${process.env.BASEURL}auth/confirmEmail/${token}`
                 // res.json(link)
           let message=`<!DOCTYPE html>
@@ -326,7 +326,7 @@ export const signin=async(req,res)=>{
               if(!match){
                   res.json('invalid password')
               }else{
-                  const token= jwt.sign({id:user._id},process.env.TokenSignIn,{expiresIn:60 * 60 * 24})
+                  const token= jwt.sign({id:user._id,email,userName:user.userName},process.env.TokenSignIn,{expiresIn:60 * 60 * 24})
                   res.status(200).json({message:'sucess',token})
               }
           }
