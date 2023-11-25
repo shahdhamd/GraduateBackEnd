@@ -13,7 +13,7 @@ export const getAllUser=async(req,res)=>{
         return res.status(200).json({message:'sucess',user})
 
     }catch(error){
-        return res.status(400).json({message:`catch error ${error}`})
+        return res.json({message:`catch error ${error}`})
     }
     
 }
@@ -24,16 +24,16 @@ export const updatepassward=async(req,res)=>{
         // res.json(hash)
         const match=bcrypt.compare(oldpassward,user.passward)
         if(!match){
-            return res.status(400).json({message:'invalid passward'})
+            return res.json({message:'invalid passward'})
         }
         const hash=bcrypt.hashSync(newpassward,parseInt(process.env.SaltRound))
         const update=await userModel.findByIdAndUpdate(user.id,{passward:hash})
         if(!update){
-            return res.status(400).json({message:'fail update'})
+            return res.json({message:'fail update'})
         }
         res.status(200).json({message:'sucess',update})
     }catch(error){
-        return res.status(400).json({message:`catch error ${error}`})
+        return res.json({message:`catch error ${error}`})
     }
 }
 export const createUserAccount=async(req,res)=>{
@@ -41,7 +41,7 @@ export const createUserAccount=async(req,res)=>{
         const {passward,userName,email}=req.body
         const finduser=await userModel.findOne({email:email})
         if(finduser){
-            return res.status(400).json({message:'email already exist'})
+            return res.json({message:'email already exist'})
         }
         const hash=bcrypt.hashSync(passward,parseInt(process.env.SaltRound))
         const newUser=await userModel({userName,passward:hash,passward,email})
@@ -311,10 +311,10 @@ export const createUserAccount=async(req,res)=>{
             const saveUser=await newUser.save()
             return res.status(200).json({message:'sucess',saveUser})
         }
-            return res.status(404).json('fail signup')
+            return res.json('fail signup')
             
     }catch(error){
-        return res.status(400).json({message:`catch error ${error}`})
+        return res.json({message:`catch error ${error}`})
     }
     
 }
@@ -328,19 +328,19 @@ export const deleteUserAccount=async(req,res)=>{
     
     return res.status(200).json({message:'sucess delete account',user})
   }
-  return res.status(400).json({message:'fail delete account'})
+  return res.json({message:'fail delete account'})
 }
 export const uploadimage=async(req,res)=>{
   const {_id}=req.user;
   if(!req.file){
-    return res.status(400).json({message:'upload image plz'})
+    return res.json({message:'upload image plz'})
   }
   const {secure_url}=await cloudinary.uploader.upload(req.file.path,{
     folder:`plant/user/${_id}`
   })
   const user=await userModel.findByIdAndUpdate(_id,{image:secure_url})
   if(!user){
-    return res.status(400).json({message:'fail'})
+    return res.json({message:'fail'})
   }
   return res.status(200).json({message:'sucess',user})
 }
