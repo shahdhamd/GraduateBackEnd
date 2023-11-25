@@ -325,7 +325,7 @@ export const signin=async(req,res)=>{
             const now=moment()
             const user=await userModel.findByIdAndUpdate(findUser.id,{lastOpenDate:now})
             const token =jwt.sign({id:findUser._id},process.env.TokenSignIn,{expiresIn:60 *60 *24})
-            return res.status(200).json({message:"sucess sign in",token})
+            return res.status(200).json({message:"sucess",token})
         }
     }catch(error){
         res.json(`catch error ${error}`)
