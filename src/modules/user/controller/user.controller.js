@@ -332,6 +332,7 @@ export const deleteUserAccount=async(req,res)=>{
 }
 export const uploadimage=async(req,res)=>{
   const {_id}=req.user;
+    try{
   if(!req.file){
     return res.json({message:'upload image plz'})
   }
@@ -343,5 +344,8 @@ export const uploadimage=async(req,res)=>{
     return res.json({message:'fail'})
   }
   return res.status(200).json({message:'sucess',user})
+    }catch(error){
+        return res.json(`catch error ${error}`);
+    }
 }
 
