@@ -17,7 +17,7 @@ export const signin={
 
 export const forgetPassward={
     body:joi.object().required().keys({
-        newpassward:joi.string().required(),
+        newPassward:joi.string().required(),
         email:joi.string().email().required(),
         code:joi.string().required()
     })
