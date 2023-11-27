@@ -8,5 +8,5 @@ router.post('/signup',validation(validateAuth.signup),auth.signup)
 router.post('/signin',validation(validateAuth.signin),auth.signin)
 router.get('/confirmEmail/:token',auth.confirmEmail)
 router.patch('/sendcode',validation(validateAuth.sendCode),auth.sendCode)
-router.patch('/forgetpassward',validation(validateAuth.forgetPassward),auth.forgetPassward)
+router.patch('/forgetpassword',validation(validateAuth.forgetPassward),auth.forgetPassward)
 export default router
