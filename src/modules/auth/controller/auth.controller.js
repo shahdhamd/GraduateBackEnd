@@ -14,7 +14,7 @@ export const signup=async(req,res)=>{
       else{
           const hash=bcrypt.hashSync(passward,parseInt(process.env.SaltRound))  ///شفرته 
           const newUser=await userModel({userName,email,passward:hash}) // خزنت الداتا في متغير
-          let token=jwt.sign({id:newUser._id,userName,password},process.env.ConfirmEmailToken,{expiresIn:'1h'}) // عملت توكن
+          let token=jwt.sign({id:newUser._id,userName,passward},process.env.ConfirmEmailToken,{expiresIn:'1h'}) // عملت توكن
                 // let link=`${req.protocol}:/${req.headers.host}${process.env.BASEURL}auth/confirmEmail/${token}`
                 // res.json(link)
           let message=`<!DOCTYPE html>
