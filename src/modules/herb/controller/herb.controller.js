@@ -89,26 +89,25 @@ export const getAllHerb = async (req, res) => {
       let lastIndex = page * limit;
   
       // const herb=await herbModel.find({}).limit(limit).skip(skip)
-      const herb = await herbModel.find({});
+      const herb = await herbModel.find({}).maxTimeMS(20000);
   
       let result = {};
       const totalUser = herb.length;
       const pageCount = Math.ceil(herb.length / limit);
-  
+      let next;
       if (lastIndex < herb.length) {
-        result.next = {
+        next = {
           page: page + 1,
         };
       }
-  
+      let prev;
       if (startIndex > 0) {
-        result.prev = {
+        prev = {
           page: page - 1,
         };
       }
   
       result = herb.slice(startIndex, lastIndex);
-      console.log(result.prev)
       if (!result) {
         return res.status(400).json({ message: 'fail' });
       }
@@ -116,9 +115,9 @@ export const getAllHerb = async (req, res) => {
         message: 'success',
         totalUser,
         pageCount,
-        next: result.next,
-        prev: result.prev,
-         result,
+        next,
+        prev,
+        result,
       });
     } catch (error) {
       return res.status(400).json({ message: `catch error ${error}` });
