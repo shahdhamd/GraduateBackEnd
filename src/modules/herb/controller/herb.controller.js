@@ -73,16 +73,45 @@ export const searchByName=async(req,res)=>{
     }
 }
 export const getAllHerb=async(req,res)=>{
-   try{
-       const {page,size}=req.query
-        const{limit, skip}=pagination(page,size)
-        const herb=await herbModel.find({}).limit(limit).skip(skip)
-        if(!herb){
+    try{
+        let {page,size}=req.query
+        let {limit, skip}=pagination(page,size)
+       
+        if(!size || size<=0){
+            limit=8;
+            size=8;
+        }
+        if(!page || page<=0){
+            console.log('ttruee')
+            page=1;
+        }
+        let startIndex=(page-1)*limit;
+        let lastIndex=(page)*limit;
+        // const herb=await herbModel.find({}).limit(limit).skip(skip)
+
+        const herb=await herbModel.find({})
+        let result={}
+        const totalUser=herb.length
+        const pageCount=Math.ceil(herb.length/limit)
+
+        if(lastIndex<herb.length){
+        result.next={
+            page:page+1,
+        }}
+
+        if(startIndex>herb.length){
+            result.prev={
+            page:page-1,
+         }
+        }
+        result=herb.slice(startIndex,lastIndex)
+        if(!result){
             return res.status(400).json({message:'fail'})
         }
-        return res.status(200).json({message:'sucess',limit,herb})
+        return res.status(200).json({message:'sucess',totalUser,pageCount,result})
     }catch(error){
         return res.status(400).json({message:`catch error ${error}`})
     }
 }
+
 
