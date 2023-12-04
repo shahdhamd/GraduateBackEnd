@@ -73,16 +73,16 @@ export const searchByName=async(req,res)=>{
     }
 }
 export const getAllHerb=async(req,res)=>{
-    try{
+   try{
         const {page}=req.query
         const{limit, skip}=pagination(page)
-        const herb=await herbModel.find({})
+        const herb=await herbModel.find({}).limit(limit).skip(skip)
         if(!herb){
-            return res.json({message:'fail'})
+            return res.status(400).json({message:'fail'})
         }
         return res.status(200).json({message:'sucess',herb})
     }catch(error){
-        return res.json({message:`catch error ${error}`})
+        return res.status(400).json({message:`catch error ${error}`})
     }
 }
 
