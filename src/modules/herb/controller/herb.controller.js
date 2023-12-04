@@ -107,7 +107,7 @@ export const getAllHerb = async (req, res) => {
         };
       }
   
-      result.data = herb.slice(startIndex, lastIndex);
+      result = herb.slice(startIndex, lastIndex);
       console.log(result.prev)
       if (!result) {
         return res.status(400).json({ message: 'fail' });
@@ -118,7 +118,7 @@ export const getAllHerb = async (req, res) => {
         pageCount,
         next: result.next,
         prev: result.prev,
-        data: result.data,
+         result,
       });
     } catch (error) {
       return res.status(400).json({ message: `catch error ${error}` });
