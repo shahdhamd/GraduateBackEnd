@@ -74,8 +74,8 @@ export const searchByName=async(req,res)=>{
 }
 export const getAllHerb=async(req,res)=>{
    try{
-        const {page}=req.query
-        const{limit, skip}=pagination(page)
+       const {page,size}=req.query
+        const{limit, skip}=pagination(page,size)
         const herb=await herbModel.find({}).limit(limit).skip(skip)
         if(!herb){
             return res.status(400).json({message:'fail'})
