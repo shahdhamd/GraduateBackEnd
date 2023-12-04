@@ -80,7 +80,7 @@ export const getAllHerb=async(req,res)=>{
         if(!herb){
             return res.status(400).json({message:'fail'})
         }
-        return res.status(200).json({message:'sucess',herb})
+        return res.status(200).json({message:'sucess',limit,herb})
     }catch(error){
         return res.status(400).json({message:`catch error ${error}`})
     }
