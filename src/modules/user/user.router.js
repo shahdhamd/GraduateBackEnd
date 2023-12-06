@@ -1,4 +1,5 @@
-import { Router } from "express";
+import express from "express";
+const { Router } = express;
 import * as user from './controller/user.controller.js'
 import { endpoint } from "./user.endpoint.js";
 import {validation} from '../../middlewares/validation.js'
@@ -12,4 +13,5 @@ router.patch('/update',auth(endpoint.update),validation(validationUser.update),u
 router.post('/',auth(endpoint.addAccount),validation(validationUser.createUserAccount),user.createUserAccount)
 router.delete('/:id',auth(endpoint.deleteUserAccount),validation(validationUser.deleteUserAccount),user.deleteUserAccount)
 router.patch('/',auth(endpoint.upload),myMulter(fileValidation.imag).single('image'),user.uploadimage)
-export default router
+router.delete('/deleteUser/:id',auth(endpoint.deleteUser),validation(validationUser.deleteUserAccount),user.deleteUser)
+export default router;
