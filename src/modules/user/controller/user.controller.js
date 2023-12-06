@@ -330,6 +330,16 @@ export const deleteUserAccount=async(req,res)=>{
   }
   return res.json({message:'fail delete account'})
 }
+export const deleteUser=async(req,res)=>{
+  const {id}=req.params
+  const finduser=await userModel.findOne({_id:id,role:'user'})
+  if(finduser){
+    const user=await userModel.findOneAndDelete({_id:finduser.id})
+    
+    return res.status(200).json({message:'sucess',user})
+  }
+  return res.json({message:'fail delete account'})
+}
 export const uploadimage=async(req,res)=>{
   const {_id}=req.user;
     try{
