@@ -6,5 +6,6 @@ export const endpoint={
     addAccount:[roles.Admin],
     deleteUserAccount:[roles.Admin],
     upload:[roles.User,roles.Admin],
-    deleteUser:[roles.Admin]
+    deleteUser:[roles.Admin],
+    updateUserInfo:[roles.Admin]
 }
