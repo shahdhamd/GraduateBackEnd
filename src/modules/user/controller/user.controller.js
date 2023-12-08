@@ -359,6 +359,40 @@ export const createUserAccount=async(req,res)=>{
     }
     
 }
+
+export const updateUserInfo = async (req, res) => {
+  const { id } = req.params;
+  const { role, userName, email } = req.body;
+
+  try {
+    const findUser = await userModel.findOne({ _id: id, role: 'user' });
+
+    if (!findUser) {
+      return res.status(404).json({ message: 'User not found or not authorized' });
+    }
+
+    const user={};
+    if (userName) {
+      user.userName = userName;
+    }
+    if (email) {
+      user.email = email;
+    }
+    if (role) {
+      user.role = role;
+    }
+
+    // Perform the update
+    const updatedUser = await userModel.findOneAndUpdate({ _id: findUser.id }, user, {
+      new: true, 
+    });
+
+    return res.status(200).json({ message: 'success', user: updatedUser });
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 export const deleteUserAccount=async(req,res)=>{
   const {id}=req.params
   const finduser=await userModel.findOne({_id:id,role:'user'})
