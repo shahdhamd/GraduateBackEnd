@@ -14,4 +14,6 @@ router.post('/',auth(endpoint.addAccount),validation(validationUser.createUserAc
 router.delete('/:id',auth(endpoint.deleteUserAccount),user.deleteUserAccount)
 router.patch('/',auth(endpoint.upload),myMulter(fileValidation.imag).single('image'),user.uploadimage)
 router.delete('/deleteUser/:id',auth(endpoint.deleteUser),user.deleteUser)
+router.patch('/update/:id',auth(endpoint.updateUserInfo),validation(validationUser.updateUserInfo),user.updateUserInfo)
+
 export default router;
