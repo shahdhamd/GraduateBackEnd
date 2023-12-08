@@ -5,57 +5,17 @@ import jwt from 'jsonwebtoken'
 import { sendEmail } from "../../../services/email.js"
 import moment from "moment"
 import cloudinary from "../../../services/cloudinary.js"
-export const getAllUser=async(req,res)=>{
-   
-      try {
-        let { page, size } = req.query;
-        let { limit, skip } = pagination(page, size);
-    
-        if (!size || size <= 0) {
-          limit = 5;
-          size = 5
-        }
-        if (!page || page <= 0) {
-          console.log('ttruee');
-          page = 1;
-        }
-        let startIndex = (page - 1) * limit;
-        let lastIndex = page * limit;
-    
-        // const herb=await herbModel.find({}).limit(limit).skip(skip)
-        const user=await userModel.find({}).maxTimeMS(20000);
-    
-        let result = {};
-        const totalUser = user.length;
-        const pageCount = Math.ceil(user.length / limit);
-        let next;
-        if (lastIndex < user.length) {
-          next = {
-            page: page + 1,
-          };
-        }
-        let prev;
-        if (startIndex > 0) {
-          prev = {
-            page: page - 1,
-          };
-        }
-    
-        result = user.slice(startIndex, lastIndex);
-        if (!result) {
-          return res.status(400).json({ message: 'fail' });
-        }
-        return res.status(200).json({
-          message: 'success',
-          totalUser,
-          pageCount,
-          next,
-          prev,
-          result,
-        });
-      } catch (error) {
-        return res.status(400).json({ message: `catch error ${error}` });
-      }
+
+          export const getAllUser=async(req,res)=>{
+    try{
+        const {page}=req.query
+        const{limit, skip}=pagination(page)
+        const user=await userModel.find({}).limit(limit).skip(skip)
+        return res.status(200).json({message:'sucess',user})
+
+    }catch(error){
+        return res.json({message:`catch error ${error}`})
+    }
     
 }
 export const updatepassward=async(req,res)=>{
