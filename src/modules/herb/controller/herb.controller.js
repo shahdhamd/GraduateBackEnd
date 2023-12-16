@@ -62,11 +62,11 @@ export const updateHerb=async(req,res)=>{
 }
 export const getHerb=async(req,res)=>{
     try{
-        const user=await herbModel.find({})
-        if(!user){
+        const herb=await herbModel.find({})
+        if(!herb){
             res.json({message:'not find herb'})
         }
-        res.status(200).json({message:'sucess',user})
+        res.status(200).json({message:'sucess',herb})
     }catch(error){
         return res.json({message:`catch error ${error}`})
     }
