@@ -60,10 +60,9 @@ export const updateHerb=async(req,res)=>{
         return res.json({message:`catch error ${error}`})
     }
 }
-export const searchByName=async(req,res)=>{
+export const getHerb=async(req,res)=>{
     try{
-        const {name}=req.body
-        const user=await herbModel.findOne({name:name})
+        const user=await herbModel.find({})
         if(!user){
             res.json({message:'not find herb'})
         }
