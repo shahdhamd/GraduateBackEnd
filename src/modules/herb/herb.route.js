@@ -9,6 +9,6 @@ import { validation } from "../../middlewares/validation.js";
 router.post('/',auth(endpoint.createHerb),myMulter(fileValidation.imag).single('image'),validation(validateHerb.createHerb),herb.createHerb)
 router.delete('/:id',auth(endpoint.delete),herb.deleteHerb)
 router.patch('/:id',auth(endpoint.update),myMulter(fileValidation.imag).single('image'),herb.updateHerb)
-router.get('/',auth(endpoint.getHerb),herb.getHerb)
+router.get('/',herb.getHerb)
 router.get('/all',herb.getAllHerb)
 export default router
