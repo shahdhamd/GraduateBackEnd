@@ -39,15 +39,18 @@ export const updatepassward=async(req,res)=>{
 }
 export const createUserAccount=async(req,res)=>{
     try{
-        const {passward,userName,email}=req.body
-        const finduser=await userModel.findOne({email:email})
-        if(finduser){
-            return res.json({message:'email already exist'})
-        }
-        const hash=bcrypt.hashSync(passward,parseInt(process.env.SaltRound))
-        const newUser=await userModel({userName,passward:hash,passward,email})
-        let token=jwt.sign({id:newUser._id},process.env.ConfirmEmailToken,{expiresIn:'1h'}) // عملت توكن
-        let message=`<!DOCTYPE html>
+      const {passward,userName,email}=req.body
+      const user=await userModel.findOne({email:email})
+      if(user){
+          res.json('email exist')
+      }
+      else{
+          const hash=bcrypt.hashSync(passward,parseInt(process.env.SaltRound))  ///شفرته 
+          const newUser=await userModel({userName,email,passward:hash}) // خزنت الداتا في متغير
+          let token=jwt.sign({id:newUser._id,userName,passward},process.env.ConfirmEmailToken,{expiresIn:'1h'}) // عملت توكن
+                // let link=`${req.protocol}:/${req.headers.host}${process.env.BASEURL}auth/confirmEmail/${token}`
+                // res.json(link)
+          let message=`<!DOCTYPE html>
                 <html>
                 <head>
                 
@@ -306,16 +309,17 @@ export const createUserAccount=async(req,res)=>{
                   <!-- end body -->
                 
                 </body>
-                </html>`
-        const inf=await sendEmail(email,'verify Email',message)
-        if(inf.accepted.length){ // اذا وصلت الرسالة
-            const saveUser=await newUser.save()
-            return res.status(200).json({message:'sucess',saveUser})
-        }
-            return res.json('fail signup')
-            
+          </html>`
+          const inf=await sendEmail(email,'verify Email',message)
+          if(inf.accepted.length){ // اذا وصلت الرسالة
+              const saveUser=await newUser.save()
+              return res.status(200).json({message:'sucess',saveUser})
+          }else{
+              return res.json('fail signup')
+          }
+          }
     }catch(error){
-        return res.json({message:`catch error ${error}`})
+        res.json({message:`catch error ${error}`})
     }
     
 }
