@@ -332,7 +332,7 @@ export const updateUserInfo = async (req, res) => {
     const findUser = await userModel.findOne({ _id: id, role: 'user' });
 
     if (!findUser) {
-      return res.status(404).json({ message: 'User not found or not authorized' });
+      return res.json({ message: 'User not found or not authorized' });
     }
 
     const user={};
@@ -354,7 +354,7 @@ export const updateUserInfo = async (req, res) => {
     return res.status(200).json({ message: 'success', user: updatedUser });
   } catch (error) {
     console.error('Error updating user data:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.json({ message: 'Internal Server Error' });
   }
 };
 export const deleteUserAccount=async(req,res)=>{
