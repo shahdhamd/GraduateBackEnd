@@ -8,9 +8,9 @@ import cloudinary from "../../../services/cloudinary.js"
 
           export const getAllUser=async(req,res)=>{
     try{
-        const {page}=req.query
-        const{limit, skip}=pagination(page)
-        const user=await userModel.find({}).limit(limit).skip(skip)
+       // const {page}=req.query
+       // const{limit, skip}=pagination(page)
+        const user=await userModel.find({})
         return res.status(200).json({message:'sucess',user})
 
     }catch(error){
