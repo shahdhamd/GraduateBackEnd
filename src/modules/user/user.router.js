@@ -11,9 +11,9 @@ const router=Router()
 router.get('/',auth(endpoint.getAllUser),user.getAllUser)
 router.patch('/update',auth(endpoint.update),validation(validationUser.update),user.updatepassward)
 router.post('/',auth(endpoint.addAccount),validation(validationUser.createUserAccount),user.createUserAccount)
-router.delete('/:id',auth(endpoint.deleteUserAccount),user.deleteUserAccount)
+router.delete('/:id',auth(endpoint.deleteUser),user.deleteUser)
 router.patch('/',auth(endpoint.upload),myMulter(fileValidation.imag).single('image'),user.uploadimage)
-router.delete('/deleteUser/:id',auth(endpoint.deleteUser),user.deleteUser)
+router.delete('/deleteUser/:id',auth(endpoint.deleteUserAccount),user.deleteUserAccount)
 router.patch('/update/:id',auth(endpoint.updateUserInfo),validation(validationUser.updateUserInfo),user.updateUserInfo)
 
 export default router;
