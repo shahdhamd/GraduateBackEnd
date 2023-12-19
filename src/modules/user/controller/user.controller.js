@@ -324,39 +324,30 @@ export const createUserAccount=async(req,res)=>{
     
 }
 
-export const updateUserInfo = async (req, res) => {
-  const { id } = req.params;
-  const { role, userName, email } = req.body;
-
-  try {
-    const findUser = await userModel.findOne({ _id: id, role: 'user' });
-
-    if (!findUser) {
-      return res.json({ message: 'User not found or not authorized' });
-    }
-
-    const user={};
+export const updateUserInfo=async(req,res)=>{
+  const {id}=req.params;
+  const {role,userName,email}=req.body;
+  const findUser = await userModel.findOne({ _id: id, role: 'user' });
+  const updateFields = {};
+  try{
+  if(findUser){
     if (userName) {
-      user.userName = userName;
+      updateFields.userName = userName;
     }
     if (email) {
-      user.email = email;
+      updateFields.email = email;
     }
-    if (role) {
-      user.role = role;
+    if(role){
+      updateFields.role=role
     }
-
-    // Perform the update
-    const updatedUser = await userModel.findOneAndUpdate({ _id: findUser.id }, user, {
-      new: true, 
-    });
-
-    return res.status(200).json({ message: 'success', user: updatedUser });
-  } catch (error) {
-    console.error('Error updating user data:', error);
-    return res.json({ message: 'Internal Server Error' });
+    const updatedUser = await userModel.findOneAndUpdate({ _id: findUser.id }, updateFields, {
+      new: true, // Return the updated document
+    });    return res.status(200).json({message:'sucess',updatedUser})
+  }}catch(error){
+  return res.json({message:'fail delete account'})
   }
-};
+}
+
 export const deleteUserAccount=async(req,res)=>{
   const {id}=req.params
   const finduser=await userModel.findOne({_id:id,role:'user'})
