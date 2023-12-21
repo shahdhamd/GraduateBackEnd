@@ -15,6 +15,7 @@ app.use(compression())
 app.use(`${baseUrl}user`,indexRouter.userRouter)
 app.use(`${baseUrl}auth`,indexRouter.authRouter)
 app.use(`${baseUrl}herb`,indexRouter.herbRouter)
+app.use(`${baseUrl}contribution`,indexRouter.contributionRouter)
 
 app.use('*',(req,res)=>{
     res.status(400).json({message:'error invalid URL'})
