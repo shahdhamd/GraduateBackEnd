@@ -13,7 +13,7 @@ const baseUrl=process.env.BASEURL
 app.use(cors())
 app.use(compression())
 app.use(`${baseUrl}user`,indexRouter.userRouter)
-app.use(`${baseUrl}auth`,indexRouter.authRoter)
+app.use(`${baseUrl}auth`,indexRouter.authRouter)
 app.use(`${baseUrl}herb`,indexRouter.herbRouter)
 
 app.use('*',(req,res)=>{
