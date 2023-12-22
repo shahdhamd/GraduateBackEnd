@@ -8,6 +8,7 @@ export const createContribution={
         benefit:joi.string().required().max(1000).min(10),
         effect:joi.string().min(5).max(1000).required(),
         place:joi.string().min(3).max(200).required(),
+        image:joi.string()
     })
 }
 
