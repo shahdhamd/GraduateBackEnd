@@ -10,15 +10,15 @@ export const createContribution = async (req, res) => {
     const findHerb = await herbModel.findOne({ ArabicName: ArabicName })
     const findContribution = await contributionModel.findOne({ ArabicName: ArabicName })
     if (findHerb) {
-      return res.status(400).json({ message: 'herb already exists' });
+      return res.json({ message: 'herb already exists' });
     }
 
     if (findContribution) {
-      return res.status(400).json({ message: 'contribution already exists' });
+      return res.json({ message: 'contribution already exists' });
     }
 
     if (!req.file) {
-      return res.status(400).json({ message: 'upload image please' });
+      return res.json({ message: 'upload image please' });
     }
 
     req.body.createdBy = req.user._id;
@@ -31,13 +31,13 @@ export const createContribution = async (req, res) => {
     const contribution = await contributionModel.create(req.body);
 
     if (!contribution) {
-      return res.status(400).json({ message: 'fail' });
+      return res.json({ message: 'fail' });
     }
 
     return res.status(200).json({ message: 'success', contribution });
 
   } catch (error) {
-    return res.status(400).json({ message: `catch error ${error}` })
+    return res.json({ message: `catch error ${error}` })
   }
 
 }
